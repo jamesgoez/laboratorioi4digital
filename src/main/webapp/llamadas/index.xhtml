@@ -1,0 +1,112 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+<f:view>
+	<h:head>
+
+	</h:head>
+
+	<h:body>
+
+		<h:form>
+
+			<p:panel header="Buscar llamada">
+
+				<h:panelGrid id="pgSearchLLamada" columns="3">
+					<p:outputLabel class="texto-outputlabel"
+						value="Número de identificación: " for="cedula" />
+					<p:inputText id="cedula" required="true"
+						requiredMessage="#{sistemaBean.requiredMessage}"
+						value="#{seguridadBean.usuario.persona.numeroIdentificacion}">
+					</p:inputText>
+					<p:message id="msgCedula" for="cedula" />
+					<p:outputLabel class="texto-outputlabel" value="Primer nombre: "
+						for="nombre1" />
+					<p:inputText id="nombre1" required="true"
+						requiredMessage="#{sistemaBean.requiredMessage}"
+						value="#{seguridadBean.usuario.persona.nombre1}">
+
+					</p:inputText>
+					<p:message id="msgNombre1" for="nombre1" />
+					<p:outputLabel />
+					<p:commandButton value="Buscar llamada"
+						actionListener="#{seguridadBean.goNewUsuario}" update="dtUsuarios"
+						icon="ui-icon-document" />
+
+				</h:panelGrid>
+			</p:panel>
+
+			<br />
+			<h:panelGrid id="PGBotonesUsuario" columns="4">
+				<p:commandButton value="Registrar llamada" immediate="true"
+					actionListener="#{seguridadBean.goNewLlamada}" update="dtUsuarios"
+					icon="ui-icon-document" />
+				<p:commandButton value="Regresar" immediate="true"
+					actionListener="#{seguridadBean.closeModuleUsuario}"
+					update="dtUsuarios" icon="ui-icon-document" />
+			</h:panelGrid>
+			<br />
+			<p:dataTable id="dtUsuarios" value="#{seguridadBean.usuarioList}"
+				selectionMode="single" var="usuario" rowKey="#{usuario.id}"
+				selection="#{seguridadBean.selectedUsuario}">
+				emptyMessage="No se encontraron registros">
+				 <p:ajax event="rowSelect" update="@parent" />
+				<f:facet name="header">LLAMADAS REGISTRADAS POR JAMES GOEZ</f:facet>
+				<p:column headerText="Fecha de la llamada">
+					<h:outputText value="" />
+				</p:column>
+				<p:column headerText="Efectiva">
+					<h:outputText value="" />
+				</p:column>
+				<p:column headerText="Gestión realizada">
+					<h:outputText value="" />
+				</p:column>
+				
+				<p:column style="width:6rem">
+                <p:rowEditor editTitle="Edit Row" cancelTitle="Cancel Edit" saveTitle="Save Row"/>
+            </p:column>
+
+			</p:dataTable>
+			
+			<br/>
+
+			<p:panel id="panelDetalleUsuario" header="Detalle de la llamada">
+				<h:panelGrid columns="2" cellpadding="5">
+					<p:outputLabel value="Gestion realizada:" />
+					<p:outputLabel class="texto-outputlabelMayus"
+						value="#{seguridadBean.selectedUsuario.persona.correo}" />
+					<p:outputLabel value="Situacion identificada:" />
+					<p:outputLabel class="texto-outputlabelMayus"
+						value="#{seguridadBean.selectedUsuario.changePassword}" />
+				</h:panelGrid>
+
+			</p:panel>
+			
+			<p:panel id="panelPersonaAtendidas" header="Personas atendidas">
+				<h:panelGrid columns="2" cellpadding="5">
+					<p:outputLabel value="Nombre del estudiante" />
+					<p:outputLabel class="texto-outputlabelMayus"
+						value="#{seguridadBean.selectedUsuario.persona.correo}" />
+					
+				</h:panelGrid>
+
+			</p:panel>
+			
+			<p:panel id="panelEvidencias" header="Evidencias">
+				<h:panelGrid columns="2" cellpadding="5">
+					<p:outputLabel value="Descargar evidencia" />
+					<p:outputLabel class="texto-outputlabelMayus"
+						value="#{seguridadBean.selectedUsuario.persona.correo}" />
+					
+				</h:panelGrid>
+
+			</p:panel>
+
+
+		</h:form>
+	</h:body>
+</f:view>
+</html>

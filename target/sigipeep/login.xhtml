@@ -1,0 +1,108 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+<f:view>
+	<h:head>
+		<f:facet name="first">
+			<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+			<title>SIGIPEEP</title>
+		</f:facet>
+		<ui:debug />
+	</h:head>
+	<h:body style="background-color: #ffffff;">
+
+		<p:idleMonitor id="monitorTimeOut" timeout="900000"
+			onidle="PF('idleDialogTimeOut').show();" />
+
+		<p:dialog header="La sesión ha caducado o no existe" resizable="false"
+			widgetVar="idleDialogTimeOut" modal="true" width="400"
+			closable="false">
+			<h:outputText
+				value="El sistema caducó por falta de actividad, refresque el navegador (F5) para ingresar nuevamente." />
+		</p:dialog>
+
+		<ui:include src="/usuarios/login/changepassword.xhtml"
+			rendered="#{userBean.usuario.nombre != null}" />
+
+		<p:confirmDialog global="true">
+			<h:panelGrid columns="2" style="margin:0 auto;">
+				<p:commandButton value="SI" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="No" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</h:panelGrid>
+		</p:confirmDialog>
+		<div align="center" style="margin-top: 100px;">
+
+			<div class="content">
+				<div class="contentintro">
+					<h:form id="iniciarSesion">
+						<p:messages id="messages" skipDetailIfEqualsSummary="true"
+							showDetail="true" closable="true">
+							<p:autoUpdate />
+						</p:messages>
+						<h:panelGrid id="panelLogin" cellpadding="5"
+							style="margin-top:60px; margin-left: 120px;">
+							<h:panelGrid id="pnlIngresarUser" columns="3"
+								rendered="#{!userBean.renderedValidateUser}">
+								<p:outputLabel class="texto-outputlabel"
+									value="Nombre de usuario:" for="userName"
+									rendered="#{!userBean.renderedValidateUser}" />
+								<p:inputText id="userName" value="#{userBean.username}"
+									required="true" styleClass="input-intro"
+									rendered="#{!userBean.renderedValidateUser}">
+									<p:focus value="userName" />
+								</p:inputText>
+								<p:message for="userName" display="icon" />
+								
+								<p:outputLabel/>
+								<p:commandButton value="Siguiente" styleClass="btnintro"
+									update="panelLogin"
+									actionListener="#{userBean.validateUsuario}"
+									rendered="#{!userBean.renderedValidateUser}" style="margin-top: 10px;" />
+								
+							</h:panelGrid>
+							<h:panelGrid columns="3"
+								rendered="#{userBean.renderedValidateUser}">
+								<p:outputLabel class="texto-outputlabel"
+									value="Digite la contraseña:" />
+								<p:password id="password" value="#{userBean.password}"
+									required="true" label="password"
+									requiredMessage="El valor es obligatorio: Digite la contraseña *."
+									styleClass="input-intro">
+									<p:focus value="userName" />
+								</p:password>
+								<p:message for="password " display="icon" />
+							</h:panelGrid>
+							
+							
+
+							<h:panelGrid columns="2"
+								rendered="#{userBean.renderedValidateUser}"
+								style="margin-left: 80px;">
+								<p:commandButton value="Iniciar sesión" styleClass="btnintro"
+									update="panelLogin outputCambiarContraseñaUsuario"
+									actionListener="#{userBean.validateUsuarioPassword}" />
+								<p:commandButton value="Cancelar" styleClass="btnintro"
+									update="panelLogin" immediate="true"
+									actionListener="#{userBean.cancelValidateUsuario}" />
+							</h:panelGrid>
+							<p:commandButton value="Nuevo usuario c"
+				actionListener="#{seguridadBean.goNuevoUsuario}"
+				 process="@this" immediate="true" icon="ui-icon-document" />
+
+
+						</h:panelGrid>
+					</h:form>
+
+				</div>
+			</div>
+
+		</div>
+	</h:body>
+</f:view>
+</html>

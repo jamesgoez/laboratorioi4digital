@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                xmlns:f="http://java.sun.com/jsf/core">
+    <p:outputPanel id="outputDetalleNotificaciones">
+        <p:dialog id="dialogDetalleNotificaciones" header="Notificaciones" widgetVar="dlgDetalleNotificacion" visible="true" closeOnEscape="true" width="600" resizable="false"
+                  rendered="#{user.renderedDlgDetalleNotificaciones}">
+            <p:ajax event="close" update="outputDetalleNotificaciones pgNotificaciones lblNotificaciones" listener="#{user.closeDetalleNotificaciones}" immediate="true"/>
+            <p:panel id="panelNotificaciones" styleClass="style-ui-panel">
+                <h:panelGrid id="GridNotificaciones" styleClass="ui-panelgrid" columns="2">
+                    <h:outputText value="Fecha:" class="texto-outputnegrilla"/>
+                    <h:outputText value="#{user.selectedNotificaciones.fechaenvio}" class="texto-outputlabel">
+                        <f:convertDateTime pattern="#{pattern.dateTime}" timeZone="#{pattern.timeZone}"/>
+                    </h:outputText>
+                    <h:outputText value="Módulo:" class="texto-outputnegrilla"/>
+                    <h:outputText value="#{user.selectedNotificaciones.modulo}" class="texto-outputlabel"/>
+                    <h:outputText value="Proceso:" class="texto-outputnegrilla"/>
+                    <h:outputText value="#{user.selectedNotificaciones.proceso}" class="texto-outputlabel"/>
+                    <h:outputText value="Código:" class="texto-outputnegrilla"/>
+                    <h:outputText value="#{user.selectedNotificaciones.codigo}" class="texto-outputlabel"/>
+                    <h:outputText value="De:" class="texto-outputnegrilla"/>
+                    <h:outputText value="#{user.selectedNotificaciones.personaqueenvia}" class="texto-outputlabel"/>
+                    <h:outputText value="Mensaje:" class="texto-outputnegrilla"/>
+                    <h:outputText value="#{user.selectedNotificaciones.mensaje}" class="texto-outputlabel"/>
+                    <p:commandButton binding="#{user.btnIrProceso}" style="margin-right:30px; width: 100px; height:30px;" rendered="false"/>
+                </h:panelGrid>
+            </p:panel>
+        </p:dialog>
+    </p:outputPanel>
+    <p:outputPanel rendered="#{user.notificacionesList != null}">
+        <h:outputText id="lblNotificaciones" value="(#{user.numNotificacionesPendientes} de #{user.numTotalNotificaciones})"
+                      style=" position:fixed;height: 25px; margin-top: -22px; margin-left: 95px; font-weight: bold;"/>
+        <p:commandButton actionListener="#{user.refreshNotificaciones}" immediate="true" icon="ui-icon-refresh" title="Actualizar notificaciones"
+                         update="lblNotificaciones pgNotificaciones outputDetalleNotificaciones" rendered="#{user.renderedPanelNotificaciones}" process="@this"
+                         style=" position:fixed; width: 20px; height: 20px; margin-top: -25px; margin-left: 185px; padding-bottom: -5px;"/>
+        <p:commandButton id="btnArchivarMultiple" actionListener="#{user.archivarMultiplesNotificaciones}" title="Archivar notificaciones"
+                         update="pgNotificaciones lblNotificaciones outputDetalleNotificaciones" icon="ui-icon-close" rendered="#{user.renderedPanelNotificaciones}"
+                         style="position:fixed; width: 20px; height: 20px; margin-top: -25px; margin-left: 210px; padding-bottom: -5px;"/>
+        <p:commandButton id="btnHistorial" actionListener="#{user.historyNotificaciones}" title="Historial de notificaciones" update="pgNotificaciones lblNotificaciones outputDetalleNotificaciones"
+                         icon="ui-icon-folder-collapsed" rendered="#{user.renderedPanelNotificaciones}"
+                         style=" position:fixed; width: 20px; height: 20px; margin-top: -25px; margin-left: 235px; padding-bottom: -5px;"/>
+    </p:outputPanel>
+    <h:panelGrid id="pgNotificaciones" columns="1" rendered="#{user.notificacionesList != null}">
+        <p:dataTable id="dtNotificaciones" value="#{user.notificacionesList}" var="notificaciones" rowKey="#{notificaciones.id}"
+                     style="margin-left: -5px; padding-bottom: 0px; margin-top:-5px; margin-right:-3px;" rowStyleClass="#{notificaciones.leido == 0 ? 'dataTableRowColor' : null}"
+                     emptyMessage="No hay notificaciones pendientes" scrollHeight="550" selection="#{user.selectedNotificacionesList}">
+            <p:column selectionMode="multiple" style="width:20px;text-align:center"/>
+            <p:column width="75" headerText="Fecha">
+                <h:outputText value="#{notificaciones.fechaenvio}">
+                    <f:convertDateTime pattern="#{pattern.dateTime}" timeZone="#{pattern.timeZone}"/>
+                </h:outputText>
+            </p:column>
+            <p:column headerText="Mensaje">
+                <h:outputText value="#{notificaciones.mensaje}"/>
+            </p:column>
+            <p:column style="width:32px;text-align: center" headerText="Detalle">
+                <p:commandButton actionListener="#{user.goDetalleNotificacion}"  update=":notificaciones:outputDetalleNotificaciones" icon="ui-icon-search">
+                    <f:setPropertyActionListener value="#{notificaciones}" target="#{user.selectedNotificaciones}"/>
+                </p:commandButton>
+            </p:column>
+        </p:dataTable>
+    </h:panelGrid>
+</ui:composition>

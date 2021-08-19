@@ -1,0 +1,118 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+<f:view>
+	<h:head>
+
+	</h:head>
+
+	<h:body>
+
+		<h:form>
+			<h:panelGrid id="pgNewUsuario" columns="3">
+				<p:outputLabel
+					value="Número de identificación: " for="cedula" />
+				<p:inputText id="cedula" required="true"
+					requiredMessage="#{sistemaBean.requiredMessage}"
+					value="#{seguridadBean.usuario.persona.numeroIdentificacion}">
+					<p:ajax event="blur" listener="#{seguridadBean.formatUserName}"
+						update="username" process="@this cedula nombre1 nombre2" />
+				</p:inputText>
+				<p:message id="msgCedula" for="cedula" />
+				<p:outputLabel value="Primer nombre: "
+					for="nombre1" />
+				<p:inputText id="nombre1" required="true"
+					requiredMessage="#{sistemaBean.requiredMessage}"
+					value="#{seguridadBean.usuario.persona.nombre1}">
+					<p:ajax event="blur" listener="#{seguridadBean.formatUserName}"
+						update="username" process="@this cedula nombre1 nombre2" />
+				</p:inputText>
+				<p:message id="msgNombre1" for="nombre1" />
+				<p:outputLabel value="Segundo nombre: "
+					for="nombre2" />
+				<p:inputText id="nombre2"
+					value="#{seguridadBean.usuario.persona.nombre2}" />
+				<p:message id="msgnombre2" for="nombre2" />
+				<p:outputLabel value="Primer apellido: "
+					for="apellido1" />
+				<p:inputText id="apellido1" required="true"
+					requiredMessage="#{sistemaBean.requiredMessage}"
+					value="#{seguridadBean.usuario.persona.apellido1}">
+					<p:ajax event="blur" listener="#{seguridadBean.formatUserName}"
+						update="username" process="@this cedula nombre1 nombre2" />
+				</p:inputText>
+				<p:message id="msgApellido1" for="apellido1" />
+				<p:outputLabel value="Segundo apellido: "
+					for="apellido2" />
+				<p:inputText id="apellido2" required="true"
+					requiredMessage="#{sistemaBean.requiredMessage}"
+					value="#{seguridadBean.usuario.persona.apellido2}" />
+				<p:message id="msgapellido2" for="apellido2" />
+
+				<p:outputLabel value="Genero" for="genero" />
+				<p:selectOneMenu label="Genero" id="genero"
+					value="#{seguridadBean.usuario.persona.genero}"
+					converter="entityConverter" required="true" requiredMessage="#{sistemaBean.requiredMessage}">
+					<f:selectItem itemLabel="" itemValue="" />
+					<f:selectItems value="#{seguridadBean.generoList}"
+						var="item" itemValue="#{item}"
+						itemLabel="#{item.itemLabel}" />
+				</p:selectOneMenu>
+				<p:message id="msgGenero" for="genero" />
+
+
+				<p:outputLabel value="Fecha de nacimiento" />
+				<p:calendar id="fechaNacimiento" navigator="true" mask="true"
+					value="#{seguridadBean.usuario.persona.fechaNacimiento}"
+					requiredMessage="#{sistemaBean.requiredMessage}"
+					readonlyInput="false" pattern="#{sistemaBean.datePattern}"
+					required="true" label="Fecha de nacimiento" />
+				<p:message id="msgfechaNacimiento" for="fechaNacimiento" />
+				<p:outputLabel
+					value="Correo electrónico: " for="correo" />
+				<p:inputText id="correo" required="true"
+					requiredMessage="#{sistemaBean.requiredMessage}"
+					value="#{seguridadBean.usuario.persona.correoPersonal}" />
+				<p:message id="msgcorreo" for="correo" />
+				<p:outputLabel
+					value="Usuario por defecto: " />
+				<p:outputLabel id="username"
+					value="#{seguridadBean.usuario.username}" />
+				<p:message id="msgUsername" for="username" />
+				<p:outputLabel value="Contraseña: "
+					for="password" />
+				<p:password id="password" required="true"
+					requiredMessage="#{sistemaBean.requiredMessage}"
+					value="#{seguridadBean.usuario.newpassword}"
+					validatorMessage="La contraseña debe tener mínimo 5 caracteres.">
+					<f:validateLength minimum="4" maximum="20" />
+				</p:password>
+				<p:message id="msgPassword" for="password" />
+				<p:outputLabel
+					value="Confirmar contraseña: " for="ConfirmPassword" />
+				<p:password id="ConfirmPassword" required="true"
+					requiredMessage="#{sistemaBean.requiredMessage}"
+					value="#{seguridadBean.usuario.confirmpassword}"
+					validatorMessage="La contraseña debe tener mínimo 5 caracteres.">
+					<f:validateLength minimum="4" maximum="20" />
+				</p:password>
+				<p:message id="msgConfirmPassword" for="ConfirmPassword" />
+
+			</h:panelGrid>
+			<h:panelGrid id="pgBtnCrearUsuario" columns="2">
+				<p:commandButton id="btnGuardar" value="Guardar"
+					style="margin-left:200px;"
+					actionListener="#{seguridadBean.saveUsuario}" update="pgNewUsuario"
+					process="@this pgNewUsuario" icon="ui-icon-check" />
+				<p:commandButton value="Regresar"
+					actionListener="#{seguridadBean.closeNewUsuario}" immediate="true" />
+			</h:panelGrid>
+		</h:form>
+	</h:body>
+</f:view>
+</html>
+
+

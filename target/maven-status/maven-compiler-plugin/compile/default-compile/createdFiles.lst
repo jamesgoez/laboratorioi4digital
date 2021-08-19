@@ -1,0 +1,12 @@
+com\jee\entity\seguridad\Rol.class
+com\jee\entity\seguridad\UsuarioRol.class
+com\jee\services\seguridad\UsuarioSessionEJBBean.class
+com\jee\entity\seguridad\MenuItem.class
+com\jee\entity\seguridad\Usuario.class
+com\jee\entity\seguridad\Usuario$ChangePassword.class
+com\jee\entity\seguridad\UsuarioRol$Activo.class
+com\jee\entity\seguridad\Usuario$Activo.class
+com\jee\entity\Persona.class
+com\jee\entity\Persona$ChangePassword.class
+com\jee\entity\seguridad\RolMenuItem.class
+com\jee\entity\Persona$Activo.class

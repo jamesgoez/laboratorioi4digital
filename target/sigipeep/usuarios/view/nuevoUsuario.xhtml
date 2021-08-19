@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+	<p:outputPanel id="outputNuevoUsuario">
+		<p:dialog id="dialogNuevoUsuario" header="Nuevo usuario"
+			resizable="false" showEffect="clip" widgetVar="dlgNuevoUsuario"
+			visible="true" closeOnEscape="true">
+
+		</p:dialog>
+	</p:outputPanel>
+	<h:form>
+		<h:panelGrid id="pgNewUsuario" styleClass="ui-panelgrid" columns="3">
+			<h:outputLabel class="texto-outputlabel"
+				value="Número de identificación: " />
+			<p:inputText id="cedula" required="true"
+				requiredMessage="Campo obligatorio *."
+				value="#{seguridadBean.usuario.persona.numeroIdentificacion}">
+				<p:ajax event="blur" listener="#{seguridadBean.formatUsername}"
+					update="username" process="@this cedula nombre1 nombre2" />
+			</p:inputText>
+			<p:message id="msgCedula" for="cedula" />
+			<h:outputLabel class="texto-outputlabel" value="Primer nombre: " />
+			<p:inputText id="nombre1" required="true"
+				requiredMessage="Campo obligatorio *."
+				value="#{seguridadBean.usuario.persona.nombre1}">
+				<p:ajax event="blur" listener="#{seguridadBean.formatUsername}"
+					update="username" process="@this cedula nombre1 nombre2" />
+			</p:inputText>
+			<p:message id="msgNombre1" for="nombre1" />
+			<h:outputLabel class="texto-outputlabel" value="Segundo nombre: " />
+			<p:inputText id="nombre2"
+				value="#{seguridadBean.usuario.persona.nombre2}" />
+			<p:message id="msgnombre2" for="nombre2" />
+			<h:outputLabel class="texto-outputlabel" value="Primer apellido: " />
+			<p:inputText id="apellido1" required="true"
+				requiredMessage="Campo obligatorio *."
+				value="#{seguridadBean.usuario.persona.apellido}">
+				<p:ajax event="blur" listener="#{seguridadBean.formatUsername}"
+					update="username" process="@this cedula nombre1 nombre2" />
+			</p:inputText>
+			<p:message id="msgApellido1" for="apellido1" />
+			<h:outputLabel class="texto-outputlabel" value="Segundo apellido: " />
+			<p:inputText id="apellido2" required="true"
+				requiredMessage="Campo obligatorio *."
+				value="#{seguridadBean.usuario.persona.apellido2}" />
+			<p:message id="msgapellido2" for="apellido2" />
+			<h:outputLabel class="texto-outputlabel" value="Correo electrónico: " />
+			<p:inputText id="correo" required="true"
+				requiredMessage="Campo obligatorio *."
+				value="#{seguridadBean.usuario.persona.correo}" />
+			<p:message id="msgcorreo" for="correo" />
+			<h:outputLabel class="texto-outputlabel" value="Usuario: " />
+			<h:outputText id="username" class="texto-outputlabel"
+				value="#{seguridadBean.usuario.username}" />
+			<p:message id="msgUsername" for="username" />
+			<h:outputLabel class="texto-outputlabel" value="Contraseña: " />
+			<p:password id="password" required="true"
+				requiredMessage="Campo obligatorio *."
+				value="#{seguridadBean.usuario.newpassword}"
+				validatorMessage="La contraseña debe tener mínimo 5 caracteres.">
+				<f:validateLength minimum="4" maximum="20" />
+			</p:password>
+			<p:message id="msgPassword" for="password" />
+			<h:outputLabel class="texto-outputlabel"
+				value="Confirmar contraseña: " />
+			<p:password id="ConfirmPassword" required="true"
+				requiredMessage="Campo obligatorio *."
+				value="#{seguridadBean.usuario.confirmpassword}"
+				validatorMessage="La contraseña debe tener mínimo 5 caracteres.">
+				<f:validateLength minimum="4" maximum="20" />
+			</p:password>
+			<p:message id="msgConfirmPassword" for="ConfirmPassword" />
+
+		</h:panelGrid>
+		<h:panelGrid id="pgBtnCrearUsuario" styleClass="ui-panelgrid"
+			columns="2">
+			<p:commandButton id="btnGuardar" value="Guardar"
+				style="margin-left:200px;"
+				actionListener="#{seguridadBean.newUsuario}" update="pgNewUsuario"
+				process="@this pgNewUsuario" icon="ui-icon-check" />
+			<p:commandButton value="Salir"
+				actionListener="#{seguridadBean.closeNewUsuario}" immediate="true"
+				update="" icon="ui-icon-close" style="margin-left: 15px;" />
+		</h:panelGrid>
+	</h:form>
+</ui:composition>
+
+

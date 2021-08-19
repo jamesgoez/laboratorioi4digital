@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+<f:view>
+	<h:head>
+
+	</h:head>
+
+	<h:body>
+
+		<h:form>
+		
+		<p:panel header="Buscar estudiante SIMAT">
+
+				<h:panelGrid id="pgSearchLLamada" columns="3">
+					<p:outputLabel class="texto-outputlabel"
+						value="Número de identificación: " for="cedula" />
+					<p:inputText id="cedula" required="true"
+						requiredMessage="#{sistemaBean.requiredMessage}"
+						value="#{seguridadBean.usuario.persona.numeroIdentificacion}">
+					</p:inputText>
+					<p:message id="msgCedula" for="cedula" />
+					<p:outputLabel class="texto-outputlabel" value="Primer nombre: "
+						for="nombre1" />
+					<p:inputText id="nombre1" required="true"
+						requiredMessage="#{sistemaBean.requiredMessage}"
+						value="#{seguridadBean.usuario.persona.nombre1}">
+
+					</p:inputText>
+					<p:message id="msgNombre1" for="nombre1" />
+					<p:outputLabel />
+					<p:commandButton value="Buscar llamada"
+						actionListener="#{seguridadBean.goNewUsuario}" 
+						icon="ui-icon-document" />
+
+				</h:panelGrid>
+			</p:panel>
+		
+		<br/>
+		
+			<h:panelGrid id="pgNewUsuario" columns="3">
+			
+			<p:outputLabel class="texto-outputlabel" value="Matriz estratégica" />
+			
+			<p:selectManyMenu id="advanced" value="#{selectManyView.selectedCountries}"
+                            converter="#{countryConverter}"
+                            var="c" filter="true" filterMatchMode="contains" showCheckbox="true" styleClass="manymenu-advanced">
+            <f:selectItems value="#{selectManyView.countries}" var="country" itemLabel="#{country.name}"
+                            itemValue="#{country}"/>
+
+            <p:column>
+                <span class="flag flag-#{c.code}" style="width: 30px; height: 20px"/>
+            </p:column>
+
+            <p:column>
+                <h:outputText value="#{c.name}"/>
+            </p:column>
+        </p:selectManyMenu>
+			
+				<p:message  for="advanced" />
+
+				<p:outputLabel value="Fecha de la llamada" />
+				<p:calendar id="fechaNacimiento" navigator="true" mask="true"
+					value="#{seguridadBean.usuario.persona.fechaNacimiento}"
+					requiredMessage="#{sistemaBean.requiredMessage}"
+					readonlyInput="false" pattern="#{sistemaBean.datePattern}"
+					required="true" label="Fecha de nacimiento" />
+				<p:message id="msgfechaNacimiento" for="fechaNacimiento" />
+			
+
+			</h:panelGrid>
+			<h:panelGrid id="pgBtnCrearUsuario" columns="2">
+				<p:commandButton id="btnGuardar" value="Guardar"
+					style="margin-left:200px;"
+					actionListener="#{seguridadBean.saveUsuario}" update="pgNewUsuario"
+					process="@this pgNewUsuario" icon="ui-icon-check" />
+				<p:commandButton value="Regresar"
+					actionListener="#{seguridadBean.closeNewLlamada}" immediate="true" />
+			</h:panelGrid>
+		</h:form>
+	</h:body>
+</f:view>
+</html>
+
+

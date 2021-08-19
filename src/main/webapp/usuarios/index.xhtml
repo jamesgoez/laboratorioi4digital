@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+<f:view>
+	<h:head>
+
+	</h:head>
+
+	<h:body>
+
+		<h:form>
+			<p:messages id="messages" skipDetailIfEqualsSummary="true"
+				showDetail="true" closable="true">
+				<p:autoUpdate />
+			</p:messages>
+			<h:panelGrid id="PGBotonesUsuario" columns="4">
+				<p:commandButton value="Registrar usuario"
+					actionListener="#{seguridadBean.goNewUsuario}" update="dtUsuarios"
+					icon="ui-icon-document" />
+				<p:commandButton value="Regresar"
+					actionListener="#{seguridadBean.closeModuleUsuario}"
+					update="dtUsuarios" icon="ui-icon-document" />
+			</h:panelGrid>
+			<p:dataTable id="dtUsuarios" value="#{seguridadBean.usuarioList}"
+				selectionMode="single" var="usuario" rowKey="#{usuario.id}"
+				selection="#{seguridadBean.selectedUsuario}">
+				emptyMessage="No se encontraron registros">
+				 <p:ajax event="rowSelect" update="@parent" />
+				<f:facet name="header">USUARIOS DEL SISTEMA</f:facet>
+				<p:column headerText="Número de identificación">
+					<h:outputText value="#{usuario.persona.numeroIdentificacion}" />
+				</p:column>
+				<p:column headerText="Nombre de la persona">
+					<h:outputText value="#{usuario.persona.nombreCompleto}" />
+				</p:column>
+				<p:column headerText="Nombre de usuario">
+					<h:outputText value="#{usuario.username}" />
+				</p:column>
+
+			</p:dataTable>
+			<p:panel id="panelDetalleUsuario" header="Datos de persona"
+				rendered="#{seguridadBean.selectedUsuario != null}">
+				<h:panelGrid columns="2" cellpadding="5">
+					<p:outputLabel value="Correo electrónico:" />
+					<p:outputLabel class="texto-outputlabelMayus"
+						value="#{seguridadBean.selectedUsuario.persona.correoPersonal}" />
+					<p:outputLabel value="Cambiar contraseña:" />
+					<p:outputLabel class="texto-outputlabelMayus"
+						value="#{seguridadBean.selectedUsuario.changePassword}" />
+				</h:panelGrid>
+
+			</p:panel>
+			<p:panel>
+
+			</p:panel>
+
+
+		</h:form>
+	</h:body>
+</f:view>
+</html>

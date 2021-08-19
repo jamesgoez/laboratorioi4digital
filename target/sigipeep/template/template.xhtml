@@ -1,0 +1,126 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+                <title>SIGIPEEP</title>
+            </f:facet>
+            <ui:debug/>
+            
+            <script type="text/javascript">
+              function start() {
+                  PF('statusDialog').show();
+              }
+
+              function stop() {
+                  PF('statusDialog').hide();
+              }
+
+              PrimeFaces.locales['es'] = {
+                  closeText : 'Cerrar', prevText : 'Anterior', nextText : 'Siguiente', monthNames : ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'], monthNamesShort : ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'], dayNames : ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'], dayNamesShort : ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'], dayNamesMin : ['D', 'L', 'M', 'M', 'J', 'V', 'S'], weekHeader : 'Semana', firstDay : 1, isRTL : false, showMonthAfterYear : false, yearSuffix : '', timeOnlyTitle : 'Sólo hora', timeText : 'Tiempo', hourText : 'Hora', minuteText : 'Minuto', secondText : 'Segundo', currentText : 'Fecha actual', ampm : false, month : 'Mes', week : 'Semana', day : 'Día', allDayText : 'Todo el día'
+              };
+
+              function reloadPage() {
+                  window.location.reload();
+                  window.stop();
+              }
+            </script>
+            <h:outputScript library="primefaces-extensions" name="primefaces-extensions.js"/>
+        </h:head>
+        <h:body onload="PF('statusDialog').hide();" styleClass="contenedor">
+        <h:outputStylesheet library="css" name="style.css" target="head" />
+            <p:dialog widgetVar="statusDialog" showHeader="false" draggable="false" closable="false" resizable="false" visible="false" position="center" maximizable="false" minimizable="false">
+                <p:panel styleClass="style-ui-panel">
+                    <h:panelGrid columns="2">
+                        <p:graphicImage value="/images/ajax-loader.gif" width="30"/>
+                        <h:outputText value="Procesando la solicitud, por favor espere..." class="texto-outputlabel" style="padding-left: 7px;"/>
+                    </h:panelGrid>
+                </p:panel>
+            </p:dialog>
+             
+            <p:ajaxStatus onstart="PF('statusDialog').show();" onsuccess="PF('statusDialog').hide();"/>
+             
+            <p:idleMonitor id="monitorTimeOut" timeout="3599995" onidle="PF('idleDialogTimeOut').show()">
+                <p:ajax event="idle" listener="#{userBean.sessionCerradaPorInactividad}"/>
+            </p:idleMonitor>
+             
+            <p:dialog header="La sesión ha caducado o no existe" resizable="false" widgetVar="idleDialogTimeOut" modal="true" width="400" closable="false">
+                <h:outputText value="Se ha detectado inactivada en el sistema."/>
+                <p>
+                    <h:outputText value="No olvide guardar y cerrar la sesión para evitar perdidas de información."/>
+                     
+                    <a href="#{FacesPublico.iniciarSession}" style="font-size: 14px;">Iniciar sesión</a>
+                </p>
+            </p:dialog>
+             
+            <p:confirmDialog global="true" widgetVar="dlgCerrarSesion" icon="ui-icon-alert" header="Cerrar sesión"
+                             message="¿Cerrar la sesión ahora? Los datos que no han sido guardados no se podrán recuperar.">
+                <h:panelGrid columns="2" style="margin:0 auto;">
+                    <p:commandButton value="SI" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" immediate="true" actionListener="#{userBean.cerrarSession}"
+                                     oncomplete="PF('dlgCerrarSesion').hide();"/>
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" onclick="PF('dlgCerrarSesion').hide();"/>
+                </h:panelGrid>
+            </p:confirmDialog>
+             
+            <h:panelGrid rendered="#{userBean.usuario.nombre == null}" style="width: 350px; margin: 20% auto auto auto;">
+                <p:row>
+                    <p:column>
+                        <h:outputText value="La sesión ha caducado o no existe, por favor inicie sesión nuevamente. " class="texto-outputlabel" style="font-size: 15px;"/>
+                    </p:column>
+                    <p:column>
+                        <a href="#{FacesPublico.iniciarSession}" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; font-size: 14px;">Iniciar sesión</a>
+                    </p:column>
+                </p:row>
+            </h:panelGrid>
+             
+            <ui:include src="/sistema/Usuario/changepassworduserBean.xhtml" rendered="#{userBean.usuario.nombre != null}"/>
+            
+             <p:confirmDialog global="true">
+                <h:panelGrid columns="2" style="margin:0 auto;">
+                    <p:commandButton value="SI" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+                </h:panelGrid>
+            </p:confirmDialog>
+             
+            <p:layout fullPage="true" resizeTitle="resize" rendered="#{userBean.usuario.nombre != null}">
+                <p:layoutUnit position="north" id="north"
+                              style="background-image: url('/images/banner.PNG'); background-repeat: no-repeat; -webkit-background-size: 100%;-moz-background-size: 100%;-o-background-size: 100%; border:none;">
+                    <h:form>
+                        <div style="margin-left: 22%; margin-top: 6.5%;">
+                            <h:outputText id="lblnombreusuario" class="texto-outputnegrilla" style="color:#fff; margin-right: 10px;" value="#{userBean.usuario.nombreCompleto}"/>
+                             
+                            <p:commandButton id="dynaButton" type="button" value="Opciones" icon="ui-icon-gear" my="left top" at="left bottom"/>
+                             
+                            <p:menu overlay="true" trigger="dynaButton" my="left top" at="left bottom">
+                                <p:menuitem value="Cambiar contraseña" actionListener="#{userBean.goChangePasswordUser}" immediate="true" update="outputCambiarContraseñaUsuario">
+                                    <p:resetInput target=":frmChangePassword:panelCambiarContraseñaUsuario"/>
+                                </p:menuitem>
+                                <p:menuitem value="Cerrar sesión" onclick="PF('dlgCerrarSesion').show();" immediate="true"/>
+                            </p:menu>
+                        </div>
+                    </h:form>
+                </p:layoutUnit>
+                <p:layoutUnit position="west" id="west" header="#{userBean.nameMenuPrincipal}" size="260" collapsible="true" effect="drop">
+                    <h:form id="menuForm">
+                        <ui:include src="menu.xhtml"/>
+                    </h:form>
+                </p:layoutUnit>
+                <p:layoutUnit position="center">
+                    <h:form id="mainForm" enctype="multipart/form-data">
+                        <ui:insert name="content"/>
+                    </h:form>
+                </p:layoutUnit>
+                <p:layoutUnit rendered="#{userBean.renderedPanelNotificaciones}" position="east" size="380" header="Notificaciones" collapsible="true" effect="drop" style="width:200px; display:none;"
+                              id="east" collapsed="#{FacesPublico.closeNotificaciones}">
+                    <h:form id="notificaciones">
+                        <!--  <ui:include src="notificaciones.xhtml"/> -->
+                    </h:form>
+                </p:layoutUnit>
+                <p:layoutUnit position="south" id="south" style="z-index: -1 !important; border:none;">
+                    
+                </p:layoutUnit>
+            </p:layout>
+        </h:body>
+    </f:view>
+</html>		
